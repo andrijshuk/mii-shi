@@ -1,94 +1,91 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#15172b">
-<meta name="description" content="Особистий ШІ-помічник: чат, голос, пам'ять і промти для фото та відео.">
-<link rel="manifest" href="manifest.json">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Мій ШІ</title>
 <style>
-:root{--bg:#101223;--panel:#1a1d35;--panel2:#222642;--text:#f5f6ff;--muted:#aeb3d1;--accent:#9b8cff;--accent2:#65d6c5;--line:#353957}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#25274b 0,#101223 60%);color:var(--text);font:16px system-ui,-apple-system,Roboto,Arial,sans-serif;min-height:100vh}
-header{padding:18px 16px 10px;position:sticky;top:0;background:#101223ed;backdrop-filter:blur(12px);z-index:3;border-bottom:1px solid #ffffff12}
-.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:15px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-size:24px;color:#11142b;font-weight:900}.brand h1{font-size:21px;margin:0}.brand p{margin:2px 0 0;color:var(--muted);font-size:12px}
-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:12px 12px 0;max-width:760px;margin:auto}
-nav button{border:1px solid var(--line);background:var(--panel);color:var(--muted);border-radius:13px;padding:10px 4px;font-size:12px}
-nav button.active{background:var(--accent);color:#11142b;border-color:transparent;font-weight:700}
-main{padding:14px 12px 32px;max-width:760px;margin:auto}.panel{display:none}.panel.active{display:block}.card{background:linear-gradient(145deg,var(--panel),#171a30);border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:12px;box-shadow:0 10px 28px #0002}
-h2{font-size:20px;margin:0 0 8px}h3{font-size:15px;margin:0 0 9px}.hint{font-size:13px;color:var(--muted);line-height:1.5}
-textarea,input,select{width:100%;background:#11142a;border:1px solid var(--line);border-radius:12px;padding:12px;color:var(--text);font:inherit;outline:none}textarea{min-height:105px;resize:vertical}input{margin:5px 0 10px}
-button{cursor:pointer;font:inherit}.primary,.secondary,.danger{border:0;border-radius:12px;padding:12px 14px;font-weight:700}.primary{background:linear-gradient(110deg,var(--accent),#77dccc);color:#101223}.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}.danger{background:#54283a;color:#ffdce7}.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.row>*{flex:1}.smallbtn{padding:8px 10px;font-size:13px}
-.chatlog{display:flex;flex-direction:column;gap:9px;margin:12px 0}.bubble{white-space:pre-wrap;overflow-wrap:anywhere;padding:11px 13px;border-radius:15px;max-width:95%;line-height:1.45}.user{align-self:flex-end;background:#51468b}.assistant{align-self:flex-start;background:#242844;border:1px solid var(--line)}.empty{text-align:center;padding:25px 10px;color:var(--muted)}
-.item{border:1px solid var(--line);background:#13162b;border-radius:12px;padding:11px;margin-top:8px;white-space:pre-wrap;overflow-wrap:anywhere}
-.notice{background:#2a2a45;border-left:3px solid var(--accent2);padding:11px;border-radius:9px;font-size:13px;line-height:1.5;color:#e4e7ff}
-footer{text-align:center;color:var(--muted);font-size:11px;padding:10px 20px 24px}
-label{display:block;color:var(--muted);font-size:13px;margin:10px 0 5px}
-@media(min-width:600px){main{padding-top:20px}.card{padding:20px}nav button{font-size:14px}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#eef2ff;color:#172554}
+header{background:#4338ca;color:white;padding:18px;text-align:center;font-size:24px;font-weight:bold}
+main{max-width:600px;margin:auto;padding:15px}
+.card{background:white;border-radius:15px;padding:15px;margin-bottom:14px;box-shadow:0 2px 8px #0001}
+button{border:0;border-radius:10px;padding:12px;background:#4338ca;color:white;font-size:16px;cursor:pointer}
+input,textarea{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;margin:6px 0}
+#messages{height:45vh;min-height:250px;overflow-y:auto}
+.msg{padding:10px;margin:8px 0;border-radius:10px;overflow-wrap:anywhere;white-space:pre-wrap}
+.me{background:#dbeafe;text-align:right}
+.bot{background:#f1f5f9}
+.row{display:flex;gap:8px}
+.row button{flex:1}
+.small{font-size:13px;color:#64748b}
 </style>
 </head>
 <body>
-<header><div class="brand"><div class="logo">✦</div><div><h1>Мій ШІ</h1><p>Особистий помічник · локальна пам'ять · промти для медіа</p></div></div></header>
-<nav>
-<button class="active" data-tab="chat">💬 Чат</button>
-<button data-tab="photo">🎨 Фото</button>
-<button data-tab="video">🎬 Відео</button>
-<button data-tab="memory">🧠 Пам'ять</button>
-</nav>
+<header>🤖 Мій ШІ</header>
 <main>
-<section id="chat" class="panel active">
-<div class="card"><h2>Привіт! Я твій помічник</h2><p class="hint">Ця початкова версія працює як локальна вебпрограма: зберігає твою історію на цьому пристрої та допомагає готувати промти. Для розумних відповідей і справжньої генерації фото/відео треба буде підключити зовнішні сервіси.</p><div class="notice">Порада: не вводь паролі, банківські дані чи іншу секретну інформацію.</div></div>
-<div class="card"><div id="chatlog" class="chatlog"><div class="empty" id="emptychat">Напиши запитання нижче або натисни 🎙️ для голосового введення.</div></div>
-<textarea id="chatinput" placeholder="Напиши повідомлення..."></textarea>
-<div class="row"><button class="secondary" id="micBtn">🎙️ Голос</button><button class="primary" id="sendBtn">Надіслати</button></div>
-<p class="hint" id="voiceStatus"></p></div>
-</section>
-<section id="photo" class="panel">
-<div class="card"><h2>🎨 Створення фото</h2><p class="hint">Опиши зображення — програма збереже промт і дасть змогу скопіювати його для сервісу генерації.</p>
-<label for="photoPrompt">Що потрібно зобразити?</label><textarea id="photoPrompt" placeholder="Наприклад: реалістичний рудий кіт на зеленій галявині, м'яке ранкове світло, кінематографічна фотографія..."></textarea>
-<label for="photoStyle">Стиль</label><select id="photoStyle"><option>Фотореалізм</option><option>Мультфільм 3D</option><option>Аніме</option><option>Акварель</option><option>Ілюстрація для дитячих карток</option><option>Кінематографічний</option></select>
-<div class="row"><button class="primary" id="makePhotoPrompt">✨ Підготувати промт</button><button class="secondary" id="copyPhoto">📋 Копіювати</button></div>
-<div id="photoResult" class="item" hidden></div>
-<div class="notice" style="margin-top:12px">Ця версія сама не генерує зображення. Вона готує промт. Щоб створити справжнє фото, потрібен сервіс генерації; безкоштовні тарифи можуть мати обмеження.</div>
-</div></section>
-<section id="video" class="panel">
-<div class="card"><h2>🎬 Створення відео</h2><p class="hint">Можна підготувати опис для відео з нуля або оживлення фотографії.</p>
-<label for="videoMode">Тип відео</label><select id="videoMode"><option value="text">Відео з тексту</option><option value="image">Оживити фотографію</option><option value="self">Відео на основі власної фотографії</option></select>
-<label for="videoPrompt">Опиши сцену та рух</label><textarea id="videoPrompt" placeholder="Наприклад: рудий кіт біжить зеленою галявиною, вітер рухає траву, камера плавно їде поруч..."></textarea>
-<label for="videoDuration">Тривалість</label><select id="videoDuration"><option>5 секунд</option><option>10 секунд</option><option>15 секунд</option><option>30 секунд</option></select>
-<div class="row"><button class="primary" id="makeVideoPrompt">🎞️ Підготувати промт</button><button class="secondary" id="copyVideo">📋 Копіювати</button></div>
-<div id="videoResult" class="item" hidden></div>
-<div class="notice" style="margin-top:12px">Генерація відео потребує зовнішнього сервісу та зазвичай інтернету. Цей екран поки готує промт, а не створює відеофайл.</div>
-</div></section>
-<section id="memory" class="panel">
-<div class="card"><h2>🧠 Моя пам'ять</h2><p class="hint">Нотатки зберігаються у сховищі браузера на цьому телефоні. Вони не синхронізуються автоматично з іншими пристроями.</p>
-<label for="memoryInput">Додати нотатку</label><textarea id="memoryInput" placeholder="Наприклад: відповідай мені українською..."></textarea><div class="row"><button class="primary" id="saveMemory">Зберегти</button><button class="secondary" id="exportData">Експортувати дані</button></div><div id="memoryList"></div><div class="row"><button class="danger" id="clearData">Очистити історію та нотатки</button></div></div>
-<div class="card"><h3>Налаштування мови</h3><label for="langSelect">Мова інтерфейсу / голосу</label><select id="langSelect"><option value="uk-UA">Українська</option><option value="pl-PL">Polski</option><option value="en-US">English</option><option value="auto">Автоматично (для голосового введення)</option></select><p class="hint">Розпізнавання голосу залежить від браузера та може потребувати інтернету.</p></div>
-</section>
+<div class="card">
+<h3>Привіт! Я твій асистент.</h3>
+<p>Тут ти можеш записувати повідомлення та зберігати нотатки.</p>
+</div>
+<div class="card">
+<h3>💬 Чат</h3>
+<div id="messages">
+<div class="msg bot">Привіт! Напиши мені щось нижче.</div>
+</div>
+<input id="question" placeholder="Напиши повідомлення...">
+<button style="width:100%" onclick="sendMessage()">Надіслати</button>
+<p class="small">Ця версія працює без підключення до сервера. Для справжніх відповідей ШІ потрібне окреме безпечне підключення.</p>
+</div>
+<div class="card">
+<h3>📝 Мої нотатки</h3>
+<textarea id="notes" rows="4" placeholder="Запиши те, що потрібно пам'ятати..."></textarea>
+<div class="row">
+<button onclick="saveNotes()">Зберегти</button>
+<button onclick="clearNotes()">Очистити</button>
+</div>
+<p id="status" class="small"></p>
+</div>
 </main>
-<footer>Мій ШІ · початкова локальна версія. Чат поки не підключений до мовної моделі.</footer>
 <script>
-const $=id=>document.getElementById(id);
-const get=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
-const set=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
-let messages=get('mii_messages',[]), memories=get('mii_memories',[]), lastPhoto='',lastVideo='';
-function showTab(tab){document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===tab));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));}
-document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
-function renderChat(){const box=$('chatlog');box.innerHTML='';if(!messages.length){box.innerHTML='<div class="empty">Напиши запитання нижче або натисни 🎙️ для голосового введення.</div>';return}messages.forEach(m=>{const el=document.createElement('div');el.className='bubble '+(m.role==='user'?'user':'assistant');el.textContent=m.text;box.appendChild(el)});box.scrollTop=box.scrollHeight}
-function addMessage(role,text){messages.push({role,text,at:Date.now()});set('mii_messages',messages);renderChat()}
-$('sendBtn').addEventListener('click',()=>{const t=$('chatinput').value.trim();if(!t)return;addMessage('user',t);$('chatinput').value='';addMessage('assistant','Це початкова версія без підключеної мовної моделі, тому я ще не можу сформувати розумну відповідь. Твоє повідомлення збережено на цьому телефоні. Коли підключимо модель ШІ, тут з’являться справжні відповіді.');});
-$('chatinput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('sendBtn').click()}});
-$('micBtn').addEventListener('click',()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){$('voiceStatus').textContent='Голосове розпізнавання не підтримується цим браузером. Спробуй Chrome або введи текст.';return}const r=new SR();const l=$('langSelect').value;r.lang=l==='auto'?'uk-UA':l;r.interimResults=false;r.onstart=()=>$('voiceStatus').textContent='Слухаю…';r.onresult=e=>{$('chatinput').value+=e.results[0][0].transcript;$('voiceStatus').textContent='Готово — перевір текст і натисни «Надіслати».'};r.onerror=()=>$('voiceStatus').textContent='Не вдалося розпізнати голос. Перевір дозвіл на мікрофон та інтернет.';r.start()});
-$('makePhotoPrompt').addEventListener('click',()=>{const raw=$('photoPrompt').value.trim();if(!raw){$('photoPrompt').focus();return}lastPhoto=raw+'. Стиль: '+$('photoStyle').value+'. Висока деталізація, якісна композиція, без зайвого тексту на зображенні.';$('photoResult').hidden=false;$('photoResult').textContent=lastPhoto;});
-$('copyPhoto').addEventListener('click',()=>copyText(lastPhoto||$('photoPrompt').value));
-$('makeVideoPrompt').addEventListener('click',()=>{const raw=$('videoPrompt').value.trim();if(!raw){$('videoPrompt').focus();return}const mode=$('videoMode').value;const label=mode==='text'?'Створи відео з тексту.':mode==='image'?'Оживи надану фотографію, зберігаючи основний вигляд об’єктів.':'Створи відео на основі фотографії людини; використовуй її лише з дозволу цієї людини.';lastVideo=label+' Сцена: '+raw+'. Тривалість: '+$('videoDuration').value+'. Плавний природний рух, стабільна камера, без мерехтіння та спотворень.';$('videoResult').hidden=false;$('videoResult').textContent=lastVideo;});
-$('copyVideo').addEventListener('click',()=>copyText(lastVideo||$('videoPrompt').value));
-async function copyText(t){if(!t){alert('Спочатку підготуй промт.');return}try{await navigator.clipboard.writeText(t);alert('Скопійовано!')}catch{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();alert('Скопійовано!')}}
-function renderMemories(){const box=$('memoryList');box.innerHTML='';if(!memories.length){box.innerHTML='<p class="hint">Поки що нотаток немає.</p>';return}memories.forEach((m,i)=>{const el=document.createElement('div');el.className='item';const txt=document.createElement('div');txt.textContent=m;const b=document.createElement('button');b.className='danger smallbtn';b.textContent='Видалити';b.style.marginTop='8px';b.onclick=()=>{memories.splice(i,1);set('mii_memories',memories);renderMemories()};el.append(txt,b);box.appendChild(el)})}
-$('saveMemory').onclick=()=>{const t=$('memoryInput').value.trim();if(!t)return;memories.unshift(t);set('mii_memories',memories);$('memoryInput').value='';renderMemories()};
-$('exportData').onclick=()=>{const blob=new Blob([JSON.stringify({messages,memories},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mii-shi-backup.json';a.click();URL.revokeObjectURL(a.href)};
-$('clearData').onclick=()=>{if(confirm('Точно очистити всю історію чату та нотатки?')){messages=[];memories=[];set('mii_messages',messages);set('mii_memories',memories);renderChat();renderMemories()}};
-renderChat();renderMemories();
-if('serviceWorker' in navigator && location.protocol.startsWith('http')) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+const box=document.getElementById("messages");
+const question=document.getElementById("question");
+function addMessage(text,kind){
+ const div=document.createElement("div");
+ div.className="msg "+kind;
+ div.textContent=text;
+ box.appendChild(div);
+ box.scrollTop=box.scrollHeight;
+}
+function sendMessage(){
+ const text=question.value.trim();
+ if(!text)return;
+ addMessage(text,"me");
+ addMessage("Я отримав твоє повідомлення. Щоб відповідати як справжній ШІ, мене потрібно підключити до ШІ-сервісу.","bot");
+ question.value="";
+ question.focus();
+}
+question.addEventListener("keydown",function(e){
+ if(e.key==="Enter"){e.preventDefault();sendMessage();}
+});
+function saveNotes(){
+ try{
+  localStorage.setItem("mii-shi-notes",document.getElementById("notes").value);
+  document.getElementById("status").textContent="Нотатки збережено!";
+ }catch(e){
+  document.getElementById("status").textContent="Не вдалося зберегти нотатки.";
+ }
+}
+function clearNotes(){
+ if(confirm("Очистити всі нотатки?")){
+  document.getElementById("notes").value="";
+  localStorage.removeItem("mii-shi-notes");
+  document.getElementById("status").textContent="Нотатки очищено.";
+ }
+}
+try{
+ document.getElementById("notes").value=localStorage.getItem("mii-shi-notes")||"";
+}catch(e){}
 </script>
-</body></html>
+</body>
+</html>
